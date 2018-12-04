@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="libraryModelStoreContainer" CdmEntityContainer="libraryEntities">
+    <EntitySetMapping Name="Books">
+      <EntityTypeMapping TypeName="libraryModel.Book">
+        <MappingFragment StoreEntitySet="Books">
+          <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+          <ScalarProperty Name="BookId" ColumnName="BookId" />
+          <ScalarProperty Name="BookName" ColumnName="BookName" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="ShelfID" ColumnName="ShelfID" />
+          <ScalarProperty Name="Row" ColumnName="Row" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Floors">
+      <EntityTypeMapping TypeName="libraryModel.Floor">
+        <MappingFragment StoreEntitySet="Floors">
+          <ScalarProperty Name="FloorId" ColumnName="FloorId" />
+          <ScalarProperty Name="FloorName" ColumnName="FloorName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderItems">
+      <EntityTypeMapping TypeName="libraryModel.OrderItem">
+        <MappingFragment StoreEntitySet="OrderItems">
+          <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="BookID" ColumnName="BookID" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="libraryModel.Order">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="BookDate" ColumnName="BookDate" />
+          <ScalarProperty Name="isReturned" ColumnName="isReturned" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Shelves">
+      <EntityTypeMapping TypeName="libraryModel.Shelf">
+        <MappingFragment StoreEntitySet="Shelves">
+          <ScalarProperty Name="ShelfId" ColumnName="ShelfId" />
+          <ScalarProperty Name="ShelfName" ColumnName="ShelfName" />
+          <ScalarProperty Name="FloorID" ColumnName="FloorID" />
+          <ScalarProperty Name="RowsCount" ColumnName="RowsCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="libraryModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="E_mail" ColumnName="E-mail" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

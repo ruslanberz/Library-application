@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="libraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Book">
+    <Key>
+      <PropertyRef Name="BookId" />
+    </Key>
+    <Property Name="BookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BookName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="ShelfID" Type="Int32" Nullable="false" />
+    <Property Name="Row" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="Shelf" Relationship="Self.FK_Books_Shelves" FromRole="Books" ToRole="Shelves" />
+    <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Books" FromRole="Books" ToRole="OrderItems" />
+    <Property Name="IsAvailable" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Floor">
+    <Key>
+      <PropertyRef Name="FloorId" />
+    </Key>
+    <Property Name="FloorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FloorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Shelves" Relationship="Self.FK_Shelves_Floors" FromRole="Floors" ToRole="Shelves" />
+  </EntityType>
+  <EntityType Name="OrderItem">
+    <Key>
+      <PropertyRef Name="OrderItemId" />
+    </Key>
+    <Property Name="OrderItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderID" Type="Int32" Nullable="false" />
+    <Property Name="BookID" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="Book" Relationship="Self.FK_OrderItems_Books" FromRole="OrderItems" ToRole="Books" />
+    <NavigationProperty Name="Order" Relationship="Self.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="BookDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="isReturned" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+    <NavigationProperty Name="User" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Shelf">
+    <Key>
+      <PropertyRef Name="ShelfId" />
+    </Key>
+    <Property Name="ShelfId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShelfName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FloorID" Type="Int32" Nullable="false" />
+    <Property Name="RowsCount" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="Books" Relationship="Self.FK_Books_Shelves" FromRole="Shelves" ToRole="Books" />
+    <NavigationProperty Name="Floor" Relationship="Self.FK_Shelves_Floors" FromRole="Shelves" ToRole="Floors" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="E_mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+  </EntityType>
+  <Association Name="FK_Books_Shelves">
+    <End Role="Shelves" Type="Self.Shelf" Multiplicity="1" />
+    <End Role="Books" Type="Self.Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shelves">
+        <PropertyRef Name="ShelfId" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="ShelfID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_Books">
+    <End Role="Books" Type="Self.Book" Multiplicity="1" />
+    <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="BookId" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="BookID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Shelves_Floors">
+    <End Role="Floors" Type="Self.Floor" Multiplicity="1" />
+    <End Role="Shelves" Type="Self.Shelf" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Floors">
+        <PropertyRef Name="FloorId" />
+      </Principal>
+      <Dependent Role="Shelves">
+        <PropertyRef Name="FloorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_Orders">
+    <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+    <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_Users">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="libraryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Books" EntityType="Self.Book" />
+    <EntitySet Name="Floors" EntityType="Self.Floor" />
+    <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="Shelves" EntityType="Self.Shelf" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_Books_Shelves" Association="Self.FK_Books_Shelves">
+      <End Role="Shelves" EntitySet="Shelves" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_Books" Association="Self.FK_OrderItems_Books">
+      <End Role="Books" EntitySet="Books" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Shelves_Floors" Association="Self.FK_Shelves_Floors">
+      <End Role="Floors" EntitySet="Floors" />
+      <End Role="Shelves" EntitySet="Shelves" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

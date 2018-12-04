@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="libraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Books">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BookName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="ShelfID" Type="int" Nullable="false" />
+          <Property Name="Row" Type="tinyint" Nullable="false" />
+          <Property Name="IsAvailable" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Floors">
+          <Key>
+            <PropertyRef Name="FloorId" />
+          </Key>
+          <Property Name="FloorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FloorName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="OrderItemId" />
+          </Key>
+          <Property Name="OrderItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="BookID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="BookDate" Type="datetime" Nullable="false" />
+          <Property Name="isReturned" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Shelves">
+          <Key>
+            <PropertyRef Name="ShelfId" />
+          </Key>
+          <Property Name="ShelfId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShelfName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FloorID" Type="int" Nullable="false" />
+          <Property Name="RowsCount" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="E-mail" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Books_Shelves">
+          <End Role="Shelves" Type="Self.Shelves" Multiplicity="1" />
+          <End Role="Books" Type="Self.Books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shelves">
+              <PropertyRef Name="ShelfId" />
+            </Principal>
+            <Dependent Role="Books">
+              <PropertyRef Name="ShelfID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Books">
+          <End Role="Books" Type="Self.Books" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Books">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shelves_Floors">
+          <End Role="Floors" Type="Self.Floors" Multiplicity="1" />
+          <End Role="Shelves" Type="Self.Shelves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floors">
+              <PropertyRef Name="FloorId" />
+            </Principal>
+            <Dependent Role="Shelves">
+              <PropertyRef Name="FloorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="libraryModelStoreContainer">
+          <EntitySet Name="Books" EntityType="Self.Books" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Floors" EntityType="Self.Floors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shelves" EntityType="Self.Shelves" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Books_Shelves" Association="Self.FK_Books_Shelves">
+            <End Role="Shelves" EntitySet="Shelves" />
+            <End Role="Books" EntitySet="Books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Books" Association="Self.FK_OrderItems_Books">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shelves_Floors" Association="Self.FK_Shelves_Floors">
+            <End Role="Floors" EntitySet="Floors" />
+            <End Role="Shelves" EntitySet="Shelves" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="libraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BookName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ShelfID" Type="Int32" Nullable="false" />
+          <Property Name="Row" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Shelf" Relationship="Self.FK_Books_Shelves" FromRole="Books" ToRole="Shelves" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Books" FromRole="Books" ToRole="OrderItems" />
+          <Property Name="IsAvailable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Floor">
+          <Key>
+            <PropertyRef Name="FloorId" />
+          </Key>
+          <Property Name="FloorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FloorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Shelves" Relationship="Self.FK_Shelves_Floors" FromRole="Floors" ToRole="Shelves" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="OrderItemId" />
+          </Key>
+          <Property Name="OrderItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="BookID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_OrderItems_Books" FromRole="OrderItems" ToRole="Books" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="BookDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="isReturned" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Shelf">
+          <Key>
+            <PropertyRef Name="ShelfId" />
+          </Key>
+          <Property Name="ShelfId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShelfName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FloorID" Type="Int32" Nullable="false" />
+          <Property Name="RowsCount" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Books" Relationship="Self.FK_Books_Shelves" FromRole="Shelves" ToRole="Books" />
+          <NavigationProperty Name="Floor" Relationship="Self.FK_Shelves_Floors" FromRole="Shelves" ToRole="Floors" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="E_mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_Books_Shelves">
+          <End Role="Shelves" Type="Self.Shelf" Multiplicity="1" />
+          <End Role="Books" Type="Self.Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shelves">
+              <PropertyRef Name="ShelfId" />
+            </Principal>
+            <Dependent Role="Books">
+              <PropertyRef Name="ShelfID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Books">
+          <End Role="Books" Type="Self.Book" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Books">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shelves_Floors">
+          <End Role="Floors" Type="Self.Floor" Multiplicity="1" />
+          <End Role="Shelves" Type="Self.Shelf" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floors">
+              <PropertyRef Name="FloorId" />
+            </Principal>
+            <Dependent Role="Shelves">
+              <PropertyRef Name="FloorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Orders">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="libraryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Books" EntityType="Self.Book" />
+          <EntitySet Name="Floors" EntityType="Self.Floor" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Shelves" EntityType="Self.Shelf" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Books_Shelves" Association="Self.FK_Books_Shelves">
+            <End Role="Shelves" EntitySet="Shelves" />
+            <End Role="Books" EntitySet="Books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Books" Association="Self.FK_OrderItems_Books">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shelves_Floors" Association="Self.FK_Shelves_Floors">
+            <End Role="Floors" EntitySet="Floors" />
+            <End Role="Shelves" EntitySet="Shelves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="libraryModelStoreContainer" CdmEntityContainer="libraryEntities">
+          <EntitySetMapping Name="Books">
+            <EntityTypeMapping TypeName="libraryModel.Book">
+              <MappingFragment StoreEntitySet="Books">
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ShelfID" ColumnName="ShelfID" />
+                <ScalarProperty Name="Row" ColumnName="Row" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Floors">
+            <EntityTypeMapping TypeName="libraryModel.Floor">
+              <MappingFragment StoreEntitySet="Floors">
+                <ScalarProperty Name="FloorId" ColumnName="FloorId" />
+                <ScalarProperty Name="FloorName" ColumnName="FloorName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="libraryModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="libraryModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="BookDate" ColumnName="BookDate" />
+                <ScalarProperty Name="isReturned" ColumnName="isReturned" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shelves">
+            <EntityTypeMapping TypeName="libraryModel.Shelf">
+              <MappingFragment StoreEntitySet="Shelves">
+                <ScalarProperty Name="ShelfId" ColumnName="ShelfId" />
+                <ScalarProperty Name="ShelfName" ColumnName="ShelfName" />
+                <ScalarProperty Name="FloorID" ColumnName="FloorID" />
+                <ScalarProperty Name="RowsCount" ColumnName="RowsCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="libraryModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="E_mail" ColumnName="E-mail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
